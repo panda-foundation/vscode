@@ -1,49 +1,34 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "panda",
+	"name": "panda language syntax",
 	"scopeName": "source.panda",
 	"patterns": [
+		{
+			"include": "#comments"
+		},
 		{
 			"include": "#keywords"
 		},
 		{
-			"comment": "Language constants",
-			"match": "\\b(true|false|null)\\b",
-			"name": "constant.language.pd"
+			"include": "#strings"
 		},
 		{
-			"comment": "Language namespace",
-			"begin": "\\b(namespace)\\s+",
-			"beginCaptures": {
-				"1": {
-					"name": "keyword.namespace.pd"
-				}
-			},
-			"end": "(?!\\G)",
-			"patterns": [
-				{
-					"match": "\\d\\w*",
-					"name": "invalid.illegal.identifier.pd"
-				},
-				{
-					"match": "\\w+",
-					"name": "entity.name.package.pd"
-				}
-			]
+			"include": "#raw_strings"
 		},
 		{
-			"begin": "\\b(import)\\s+",
-			"beginCaptures": {
-				"1": {
-					"name": "keyword.import.pd"
-				}
-			},
-			"end": "(?!\\G)",
-			"patterns": [
-				{
-					"include": "#imports"
-				}
-			]
+			"include": "#builtin_functions"
+		},
+		{
+			"include": "#modifiers"
+		},
+		{
+			"include": "#namespace"
+		},
+		{
+			"include": "#imports"
+		},
+		{
+			"include": "#constants"
 		}
 	],
 	"repository": {
@@ -88,14 +73,15 @@
 				}
 			]
 		},
-		"modifier": {
-			"patterns": [
-				{
-					"comment": "Language modifier",
-					"match": "(?<!\\.)(\\b(new|public|static|weak)\\b",
-					"name": "storage.modifier.pd"
-				}
-			]
+		"builtin_functions":{
+			"comment": "built-in functions",
+			"match": "\\b(new|print|print_line)\\b(?=\\()",
+			"name": "support.function.builtin.pd"
+		},
+		"modifiers": {
+			"comment": "Language modifier",
+			"match": "\\b(public|static|weak)\\s+",
+			"name": "storage.modifier.pd"
 		},
 		"strings": {
 			"comment": "interpreted string literals",
@@ -114,31 +100,117 @@
 			},
 			"patterns": [
 				{
-					"name": "constant.character.escape.pd",
-					"match": "\"\""
+					"include": "#string_escaped_char"
+				},
+				{
+					"include": "#string_placeholder"
 				}
 			]
 		},
-		"rawStrings":{
-			"comment": "Raw string literals",
+		"raw_strings":{
+			"comment": "raw string literals",
+			"name": "string.quoted.raw.pd",
 			"begin": "`",
 			"beginCaptures": {
 				"0": {
-					"name": "punctuation.definition.string.begin.go"
+					"name": "punctuation.definition.string.begin.pd"
 				}
 			},
 			"end": "`",
 			"endCaptures": {
 				"0": {
-					"name": "punctuation.definition.string.end.go"
+					"name": "punctuation.definition.string.end.pd"
 				}
 			},
-			"name": "string.quoted.raw.go",
 			"patterns": [
 				{
 					"include": "#string_placeholder"
 				}
 			]
+		},
+		"string_escaped_char": {
+			"patterns": [
+				{
+					"name": "constant.character.escape.pd",
+					"match": "\\\\([0-7]{3}|[abfnrtv\\\\'\"]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})"
+				},
+				{
+					"name": "invalid.illegal.unknown-escape.pd",
+					"match": "\\\\[^0-7xuUabfnrtv\\'\"]"
+				}
+			]
+		},
+		"string_placeholder": {
+			"patterns": [
+				{
+					"name": "constant.other.placeholder.pd",
+					"match": "%(\\[\\d+\\])?([\\+#\\-0\\x20]{,2}((\\d+|\\*)?(\\.?(\\d+|\\*|(\\[\\d+\\])\\*?)?(\\[\\d+\\])?)?))?[vT%tbcdoqxXUbeEfFgGspw]"
+				}
+			]
+		},		
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.block.pd",
+					"begin": "(\\/\\*)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.definition.comment.pd"
+						}
+					},
+					"end": "(\\*\\/)",
+					"endCaptures": {
+						"1": {
+							"name": "punctuation.definition.comment.pd"
+						}
+					}
+				},
+				{
+					"name": "comment.line.double-slash.pd",
+					"begin": "(\\/\\/)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.definition.comment.go"
+						}
+					},
+					"end": "(?:\\n|$)"
+				}
+			]
+		},
+		"imports": {
+			"begin": "\\b(import)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.import.pd"
+				}
+			},
+			"end": "(?=;)",
+			"patterns": [
+				{
+					"name": "entity.name.type.namespace.pd",
+					"match": "@?[_[:alpha:]][_[:alnum:]]*"
+				}
+			]
+		},
+		"namespace": {
+			"begin": "\\b(namespace)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.namespace.pd"
+				}
+			},
+			"end": "(?=;)",
+			"patterns": [
+				{
+					"name": "entity.name.type.namespace.pd",
+					"match": "@?[_[:alpha:]][_[:alnum:]]*"
+				}
+			]
+		},
+		"constants": {
+			"comment": "language constants",
+			"match": "\\b(true|false|null)\\b",
+			"name": "constant.language.pd"
 		}
 	}
 }
