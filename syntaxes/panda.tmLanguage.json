@@ -1,0 +1,144 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "panda",
+	"scopeName": "source.panda",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"comment": "Language constants",
+			"match": "\\b(true|false|null)\\b",
+			"name": "constant.language.pd"
+		},
+		{
+			"comment": "Language namespace",
+			"begin": "\\b(namespace)\\s+",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.namespace.pd"
+				}
+			},
+			"end": "(?!\\G)",
+			"patterns": [
+				{
+					"match": "\\d\\w*",
+					"name": "invalid.illegal.identifier.pd"
+				},
+				{
+					"match": "\\w+",
+					"name": "entity.name.package.pd"
+				}
+			]
+		},
+		{
+			"begin": "\\b(import)\\s+",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.import.pd"
+				}
+			},
+			"end": "(?!\\G)",
+			"patterns": [
+				{
+					"include": "#imports"
+				}
+			]
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"comment": "flow control keywords",
+					"match": "\\b(await|break|case|catch|continue|default|else|for|foreach|if|in|return|select|switch|throw|try)\\b",
+					"name": "keyword.control.pd"
+				},
+				{
+					"match": "\\bconst\\b",
+					"name": "keyword.const.pd"
+				},
+				{
+					"match": "\\bvar\\b",
+					"name": "keyword.var.pd"
+				},
+				{
+					"match": "\\bthis\\b",
+					"name": "keyword.this.pd"
+				},
+				{
+					"match": "\\bbase\\b",
+					"name": "keyword.base.pd"
+				},				
+				{
+					"match": "\\bfunction\\b",
+					"name": "keyword.function.pd"
+				},
+				{
+					"match": "\\benum\\b",
+					"name": "keyword.enum.pd"
+				},
+				{
+					"match": "\\binterface\\b",
+					"name": "keyword.interface.pd"
+				},
+				{
+					"match": "\\bclass\\b",
+					"name": "keyword.class.pd"
+				}
+			]
+		},
+		"modifier": {
+			"patterns": [
+				{
+					"comment": "Language modifier",
+					"match": "(?<!\\.)(\\b(new|public|static|weak)\\b",
+					"name": "storage.modifier.pd"
+				}
+			]
+		},
+		"strings": {
+			"comment": "interpreted string literals",
+			"name": "string.quoted.double.pd",
+			"begin": "\"",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.pd"
+				}
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.pd"
+				}
+			},
+			"patterns": [
+				{
+					"name": "constant.character.escape.pd",
+					"match": "\"\""
+				}
+			]
+		},
+		"rawStrings":{
+			"comment": "Raw string literals",
+			"begin": "`",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.go"
+				}
+			},
+			"end": "`",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.go"
+				}
+			},
+			"name": "string.quoted.raw.go",
+			"patterns": [
+				{
+					"include": "#string_placeholder"
+				}
+			]
+		}
+	}
+}
