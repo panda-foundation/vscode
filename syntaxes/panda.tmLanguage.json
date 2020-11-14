@@ -29,63 +29,43 @@
 		},
 		{
 			"include": "#constants"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#scalar"
+		},
+		{
+			"include": "#metadata"
 		}
 	],
 	"repository": {
 		"keywords": {
 			"patterns": [
 				{
-					"comment": "flow control keywords",
 					"match": "\\b(await|break|case|catch|continue|default|else|for|foreach|if|in|return|select|switch|throw|try)\\b",
 					"name": "keyword.control.pd"
 				},
 				{
-					"match": "\\bconst\\b",
-					"name": "keyword.const.pd"
+					"match": "\\b(this|base)\\b",
+					"name": "variable.language.pd"
 				},
 				{
-					"match": "\\bvar\\b",
-					"name": "keyword.var.pd"
-				},
-				{
-					"match": "\\bthis\\b",
-					"name": "keyword.this.pd"
-				},
-				{
-					"match": "\\bbase\\b",
-					"name": "keyword.base.pd"
-				},				
-				{
-					"match": "\\bfunction\\b",
-					"name": "keyword.function.pd"
-				},
-				{
-					"match": "\\benum\\b",
-					"name": "keyword.enum.pd"
-				},
-				{
-					"match": "\\binterface\\b",
-					"name": "keyword.interface.pd"
-				},
-				{
-					"match": "\\bclass\\b",
-					"name": "keyword.class.pd"
+					"match": "\\b(const|var|function|enum|interface|class)\\b",
+					"name": "storage.type.pd"
 				}
 			]
 		},
 		"builtin_functions":{
-			"comment": "built-in functions",
 			"match": "\\b(new|print|print_line)\\b(?=\\()",
 			"name": "support.function.builtin.pd"
 		},
 		"modifiers": {
-			"comment": "Language modifier",
 			"match": "\\b(public|static|weak)\\s+",
 			"name": "storage.modifier.pd"
 		},
 		"strings": {
-			"comment": "interpreted string literals",
-			"name": "string.quoted.double.pd",
 			"begin": "\"",
 			"beginCaptures": {
 				"0": {
@@ -100,16 +80,12 @@
 			},
 			"patterns": [
 				{
-					"include": "#string_escaped_char"
-				},
-				{
-					"include": "#string_placeholder"
+					"include": "#string-character-escape"
 				}
-			]
+			],
+			"name": "string.quoted.double.pd"
 		},
 		"raw_strings":{
-			"comment": "raw string literals",
-			"name": "string.quoted.raw.pd",
 			"begin": "`",
 			"beginCaptures": {
 				"0": {
@@ -122,32 +98,12 @@
 					"name": "punctuation.definition.string.end.pd"
 				}
 			},
-			"patterns": [
-				{
-					"include": "#string_placeholder"
-				}
-			]
+			"name": "string.quoted.other.raw.pd"
 		},
-		"string_escaped_char": {
-			"patterns": [
-				{
-					"name": "constant.character.escape.pd",
-					"match": "\\\\([0-7]{3}|[abfnrtv\\\\'\"]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})"
-				},
-				{
-					"name": "invalid.illegal.unknown-escape.pd",
-					"match": "\\\\[^0-7xuUabfnrtv\\'\"]"
-				}
-			]
+		"string-character-escape": {
+			"match": "\\\\(['\"\\\\0abfnrtv]|x[0-9a-fA-F]{1,4}|U[0-9a-fA-F]{8}|u[0-9a-fA-F]{4})",
+			"name": "constant.character.escape.pd"
 		},
-		"string_placeholder": {
-			"patterns": [
-				{
-					"name": "constant.other.placeholder.pd",
-					"match": "%(\\[\\d+\\])?([\\+#\\-0\\x20]{,2}((\\d+|\\*)?(\\.?(\\d+|\\*|(\\[\\d+\\])\\*?)?(\\[\\d+\\])?)?))?[vT%tbcdoqxXUbeEfFgGspw]"
-				}
-			]
-		},		
 		"comments": {
 			"patterns": [
 				{
@@ -170,7 +126,7 @@
 					"begin": "(\\/\\/)",
 					"beginCaptures": {
 						"1": {
-							"name": "punctuation.definition.comment.go"
+							"name": "punctuation.definition.comment.pd"
 						}
 					},
 					"end": "(?:\\n|$)"
@@ -181,14 +137,14 @@
 			"begin": "\\b(import)\\s*",
 			"beginCaptures": {
 				"1": {
-					"name": "keyword.other.import.pd"
+					"name": "keyword.other.using.pd"
 				}
 			},
 			"end": "(?=;)",
 			"patterns": [
 				{
-					"name": "entity.name.type.namespace.pd",
-					"match": "@?[_[:alpha:]][_[:alnum:]]*"
+					"match": "@?[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.import.pd"
 				}
 			]
 		},
@@ -202,15 +158,63 @@
 			"end": "(?=;)",
 			"patterns": [
 				{
-					"name": "entity.name.type.namespace.pd",
-					"match": "@?[_[:alpha:]][_[:alnum:]]*"
+					"match": "@?[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.namespace.pd"
 				}
 			]
 		},
 		"constants": {
-			"comment": "language constants",
 			"match": "\\b(true|false|null)\\b",
 			"name": "constant.language.pd"
+		},
+		"scalar": {
+			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
+			"captures": {
+				"1": {
+					"name": "storage.type.pd"
+				}
+			}
+		},
+		"functions": {
+			"match": "^(\\bfunction\\b)(?:\\s+(\\([^\\)]+\\)\\s+)?(\\w+)(?=\\())?",
+			"captures": {
+				"1": {
+					"name": "keyword.function.pd"
+				},
+				"2": {
+					"patterns": [
+						{
+							"match": "\\d\\w*",
+							"name": "invalid.illegal.identifier.pd"
+						},
+						{
+							"match": "\\w+",
+							"name": "entity.name.function.pd"
+						}
+					]
+				}
+			}
+		},
+		"metadata": {
+			"patterns": [
+				{
+					"begin": "@doc|@emit",
+					"beginCaptures": {
+						"0": {
+							"name": "entity.name.tag.pd"
+						}
+					},
+					"end": "(?:\\n|$)",
+					"patterns": [
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#raw_strings"
+						}
+					]
+				}
+			]
 		}
 	}
 }
