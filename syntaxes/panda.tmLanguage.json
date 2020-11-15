@@ -28,7 +28,10 @@
 			"include": "#function"
 		},
 		{
-			"include": "#enum_class_interface"
+			"include": "#class_interface"
+		},
+		{
+			"include": "#enum"
 		},
 		{
 			"include": "#keyword"
@@ -319,8 +322,8 @@
 				}
 			]
 		},
-		"enum_class_interface": {
-			"begin": "\\b(enum|class|interface)\\b\\s+([_[:alpha:]][_[:alnum:]]*)(:)?",
+		"class_interface": {
+			"begin": "\\b(class|interface)\\b\\s+([_[:alpha:]][_[:alnum:]]*)(:)?",
 			"beginCaptures": {
 				"1": {
 					"name": "storage.type.pd"
@@ -334,6 +337,27 @@
 				{
 					"match": "[_[:alpha:]][_[:alnum:]]*",
 					"name": "entity.name.type.pd"
+				}
+			]
+		},
+		"enum": {
+			"begin": "\\b(enum)\\b\\s+([_[:alpha:]][_[:alnum:]]*)(\\{?)",
+			"beginCaptures": {
+				"1": {
+					"name": "storage.type.pd"
+				},
+				"2": {
+					"name": "entity.name.type.pd"
+				}
+			},
+			"end": "\\}",
+			"patterns": [
+				{
+					"match": "[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.pd"
+				},
+				{
+					"include": "#literal"
 				}
 			]
 		},
