@@ -7,22 +7,7 @@
 			"include": "#comments"
 		},
 		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		},
-		{
-			"include": "#raw_strings"
-		},
-		{
-			"include": "#character"
-		},
-		{
-			"include": "#builtin_functions"
-		},
-		{
-			"include": "#modifiers"
+			"include": "#metadata"
 		},
 		{
 			"include": "#namespace"
@@ -31,16 +16,25 @@
 			"include": "#imports"
 		},
 		{
-			"include": "#constants"
+			"include": "#literal"
+		},
+		{
+			"include": "#modifiers"
+		},
+		{
+			"include": "#builtin_functions"
 		},
 		{
 			"include": "#functions"
 		},
 		{
-			"include": "#scalar"
+			"include": "#builtin_types"
 		},
 		{
-			"include": "#metadata"
+			"include": "#enum_class_interface"
+		},
+		{
+			"include": "#keywords"
 		}
 	],
 	"repository": {
@@ -53,10 +47,6 @@
 				{
 					"match": "\\b(this|base)\\b",
 					"name": "variable.language.pd"
-				},
-				{
-					"match": "\\b(const|var|function|enum|interface|class)\\b",
-					"name": "storage.type.pd"
 				}
 			]
 		},
@@ -166,7 +156,7 @@
 			"match": "\\b(true|false|null)\\b",
 			"name": "constant.language.pd"
 		},
-		"scalar": {
+		"builtin_types": {
 			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
 			"captures": {
 				"1": {
@@ -279,6 +269,42 @@
 				{
 					"match": "[_[:alpha:]][_[:alnum:]]*",
 					"name": "storage.type.pd"
+				}
+			]
+		},
+		"functions": {
+			"begin": "\\bfunction\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "support.function.builtin.pd"
+				}
+			},
+			"end": "(?:\\n|{$)",
+			"patterns": [
+				{
+					"include": "#literal"
+				},
+				{
+					"match": "[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.pd"
+				}
+			]
+		},
+		"enum_class_interface": {
+			"begin": "\\b(enum|class|interface)\\b\\s+([_[:alpha:]][_[:alnum:]]*)(:)?",
+			"beginCaptures": {
+				"1": {
+					"name": "storage.type.pd"
+				},
+				"2": {
+					"name": "entity.name.type.pd"
+				}
+			},
+			"end": "(?:\\n|{$)",
+			"patterns": [
+				{
+					"match": "[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.pd"
 				}
 			]
 		},
