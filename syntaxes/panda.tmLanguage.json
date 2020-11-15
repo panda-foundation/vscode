@@ -16,9 +16,6 @@
 			"include": "#imports"
 		},
 		{
-			"include": "#literal"
-		},
-		{
 			"include": "#modifier"
 		},
 		{
@@ -34,10 +31,13 @@
 			"include": "#enum"
 		},
 		{
-			"include": "#keyword"
+			"include": "#var_const_declaration"
 		},
 		{
-			"include": "#var_const_declaration"
+			"include": "#literal"
+		},
+		{
+			"include": "#keyword"
 		}
 	],
 	"repository": {
@@ -237,7 +237,7 @@
 				}
 			]
 		},
-		"builtin_types": {
+		"builtin_type": {
 			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
 			"captures": {
 				"1": {
@@ -265,7 +265,7 @@
 					"match": "([_[:alpha:]][_[:alnum:]]*)(\\.)",
 					"captures": {
 						"1": {
-							"name": "storage.type.pd"
+							"name": "entity.name.type.pd"
 						},
 						"2": {
 							"name": "punctuation.accessor.pd"
@@ -279,13 +279,13 @@
 							"name": "punctuation.accessor.pd"
 						},
 						"2": {
-							"name": "storage.type.pd"
+							"name": "entity.name.type.pd"
 						}
 					}
 				},
 				{
 					"match": "[_[:alpha:]][_[:alnum:]]*",
-					"name": "storage.type.pd"
+					"name": "entity.name.type.pd"
 				}
 			]
 		},
@@ -366,13 +366,20 @@
 			]
 		},
 		"var_const_declaration": {
-			"match": "\\b(var|const)\\b(<identifier>)",
+			"match": "\\b(var|const)\\b\\s+([_[:alpha:]][_[:alnum:]]*)\\s+([_[:alpha:]][_.[:alnum:]]*)",
 			"captures": {
 				"1": {
 					"name": "keyword.other.var.pd"
 				},
 				"2": {
 					"name": "entity.name.variable.pd"
+				},
+				"3": {
+					"patterns": [
+						{
+							"include": "#type"
+						}
+					]
 				}
 			}
 		},
