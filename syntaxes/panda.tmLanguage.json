@@ -35,6 +35,9 @@
 		},
 		{
 			"include": "#keyword"
+		},
+		{
+			"include": "#var_const_declaration"
 		}
 	],
 	"repository": {
@@ -286,23 +289,6 @@
 				}
 			]
 		},
-		"function": {
-			"begin": "\\b(function)\\b\\s+([_~[:alpha:]][_[:alnum:]]*)",
-			"beginCaptures": {
-				"1": {
-					"name": "keyword.other.function.pd"
-				},
-				"2": {
-					"name": "support.function.pd"
-				}
-			},
-			"end": "(?:\\n|{$)",
-			"patterns": [
-				{
-					"include": "#generic_argument"
-				}
-			]
-		},
 		"generic_argument": {
 			"begin": "<",
 			"beginCaptures": {
@@ -376,6 +362,44 @@
 				{
 					"match": "[_[:alpha:]][_[:alnum:]]*",
 					"name": "entity.name.type.pd"
+				}
+			]
+		},
+		"var_const_declaration": {
+			"begin": "\\b(var|const)\\b\\s+([_[:alpha:]][_[:alnum:]]*)\\s+(?<type_name>)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.var.pd"
+				},
+				"2": {
+					"name": "entity.name.variable.pd"
+				}
+			},
+			"end": "(?=;)",
+			"patterns": [
+				{
+					"include": "#generic_argument"
+				}
+			]
+		},
+		"identifier": {
+			"match": "[_[:alpha:]][_[:alnum:]]*",
+			"name": "variable.other.readwrite.pd"
+		},
+		"function": {
+			"begin": "\\b(function)\\b\\s+([_~[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.function.pd"
+				},
+				"2": {
+					"name": "support.function.pd"
+				}
+			},
+			"end": "(?:\\n|{$)",
+			"patterns": [
+				{
+					"include": "#generic_argument"
 				}
 			]
 		}
