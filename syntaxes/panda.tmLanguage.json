@@ -16,6 +16,9 @@
 			"include": "#raw_strings"
 		},
 		{
+			"include": "#character"
+		},
+		{
 			"include": "#builtin_functions"
 		},
 		{
@@ -62,7 +65,7 @@
 			"name": "support.function.builtin.pd"
 		},
 		"modifiers": {
-			"match": "\\b(public|static|weak)\\s+",
+			"match": "\\b(public|static|weak)\\b",
 			"name": "storage.modifier.pd"
 		},
 		"strings": {
@@ -104,6 +107,92 @@
 			"match": "\\\\(['\"\\\\0abfnrtv]|x[0-9a-fA-F]{1,4}|U[0-9a-fA-F]{8}|u[0-9a-fA-F]{4})",
 			"name": "constant.character.escape.pd"
 		},
+		"character": {
+			"name": "string.quoted.single.pd",
+			"begin": "'",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.char.begin.pd"
+				}
+			},
+			"end": "(\\')|((?:[^\\\\\\n])$)",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.char.end.pd"
+				},
+				"2": {
+					"name": "invalid.illegal.newline.pd"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#char-character-escape"
+				}
+			]
+		},
+		"char-character-escape": {
+			"name": "constant.character.escape.pd",
+			"match": "\\\\(['\"\\\\0abfnrtv]|x[0-9a-fA-F]{1,4}|u[0-9a-fA-F]{4})"
+		},
+		"numeric": {
+			"patterns": [
+				{
+					"name": "constant.numeric.hex.pd",
+					"match": "\\b0(x|X)[0-9a-fA-F_]+(U|u|L|l|UL|Ul|uL|ul|LU|Lu|lU|lu)?\\b"
+				},
+				{
+					"name": "constant.numeric.binary.pd",
+					"match": "\\b0(b|B)[01_]+(U|u|L|l|UL|Ul|uL|ul|LU|Lu|lU|lu)?\\b"
+				},
+				{
+					"name": "constant.numeric.decimal.pd",
+					"match": "\\b([0-9_]+)?\\.[0-9_]+((e|E)[0-9]+)?(F|f|D|d|M|m)?\\b"
+				},
+				{
+					"name": "constant.numeric.decimal.pd",
+					"match": "\\b[0-9_]+(e|E)[0-9_]+(F|f|D|d|M|m)?\\b"
+				},
+				{
+					"name": "constant.numeric.decimal.pd",
+					"match": "\\b[0-9_]+(F|f|D|d|M|m)\\b"
+				},
+				{
+					"name": "constant.numeric.decimal.pd",
+					"match": "\\b[0-9_]+(U|u|L|l|UL|Ul|uL|ul|LU|Lu|lU|lu)?\\b"
+				}
+			]
+		},
+		"constants": {
+			"match": "\\b(true|false|null)\\b",
+			"name": "constant.language.pd"
+		},
+		"scalar": {
+			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
+			"captures": {
+				"1": {
+					"name": "storage.type.pd"
+				}
+			}
+		},
+		"literal": {
+			"patterns": [
+				{
+					"include": "#constants"
+				},
+				{
+					"include": "#numeric"
+				},
+				{
+					"include": "#character"
+				},
+				{
+					"include": "#strings"
+				},
+				{
+					"include": "#raw_strings"
+				}
+			]
+		},
 		"comments": {
 			"patterns": [
 				{
@@ -134,7 +223,7 @@
 			]
 		},
 		"imports": {
-			"begin": "\\b(import)\\s*",
+			"begin": "\\b(import)\\b",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.other.using.pd"
@@ -143,13 +232,13 @@
 			"end": "(?=;)",
 			"patterns": [
 				{
-					"match": "@?[_[:alpha:]][_[:alnum:]]*",
+					"match": "[_[:alpha:]][_[:alnum:]]*",
 					"name": "entity.name.type.import.pd"
 				}
 			]
 		},
 		"namespace": {
-			"begin": "\\b(namespace)\\s*",
+			"begin": "\\b(namespace)\\b",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.other.namespace.pd"
@@ -158,61 +247,56 @@
 			"end": "(?=;)",
 			"patterns": [
 				{
-					"match": "@?[_[:alpha:]][_[:alnum:]]*",
+					"match": "[_[:alpha:]][_[:alnum:]]*",
 					"name": "entity.name.type.namespace.pd"
 				}
 			]
 		},
-		"constants": {
-			"match": "\\b(true|false|null)\\b",
-			"name": "constant.language.pd"
-		},
-		"scalar": {
-			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
-			"captures": {
-				"1": {
-					"name": "storage.type.pd"
-				}
-			}
-		},
-		"functions": {
-			"match": "^(\\bfunction\\b)(?:\\s+(\\([^\\)]+\\)\\s+)?(\\w+)(?=\\())?",
-			"captures": {
-				"1": {
-					"name": "keyword.function.pd"
-				},
-				"2": {
-					"patterns": [
-						{
-							"match": "\\d\\w*",
-							"name": "invalid.illegal.identifier.pd"
-						},
-						{
-							"match": "\\w+",
-							"name": "entity.name.function.pd"
-						}
-					]
-				}
-			}
-		},
-		"metadata": {
+		"types": {
 			"patterns": [
 				{
-					"begin": "@doc|@emit",
-					"beginCaptures": {
-						"0": {
-							"name": "entity.name.tag.pd"
-						}
-					},
-					"end": "(?:\\n|$)",
-					"patterns": [
-						{
-							"include": "#strings"
+					"match": "([_[:alpha:]][_[:alnum:]]*)(\\.)",
+					"captures": {
+						"1": {
+							"name": "storage.type.pd"
 						},
-						{
-							"include": "#raw_strings"
+						"2": {
+							"name": "punctuation.accessor.pd"
 						}
-					]
+					}
+				},
+				{
+					"match": "(\\.)([_[:alpha:]][_[:alnum:]]*)",
+					"captures": {
+						"1": {
+							"name": "punctuation.accessor.pd"
+						},
+						"2": {
+							"name": "storage.type.pd"
+						}
+					}
+				},
+				{
+					"match": "[_[:alpha:]][_[:alnum:]]*",
+					"name": "storage.type.pd"
+				}
+			]
+		},
+		"metadata": {
+			"begin": "(@[_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "entity.name.tag.pd"
+				}
+			},
+			"end": "(?:\\n|$)",
+			"patterns": [
+				{
+					"include": "#literal"
+				},
+				{
+					"match": "[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.pd"
 				}
 			]
 		}
