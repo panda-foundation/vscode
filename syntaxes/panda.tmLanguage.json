@@ -28,7 +28,7 @@
 			"include": "#function"
 		},
 		{
-			"include": "#class_interface"
+			"include": "#class"
 		},
 		{
 			"include": "#enum"
@@ -308,8 +308,8 @@
 				}
 			]
 		},
-		"class_interface": {
-			"begin": "\\b(class|interface)\\b\\s+([_[:alpha:]][_[:alnum:]]*)(:)?",
+		"class": {
+			"begin": "\\b(class)\\b\\s+([_[:alpha:]][_[:alnum:]]*)(:)?",
 			"beginCaptures": {
 				"1": {
 					"name": "storage.type.pd"
@@ -366,25 +366,19 @@
 			]
 		},
 		"var_const_declaration": {
-			"begin": "\\b(var|const)\\b\\s+([_[:alpha:]][_[:alnum:]]*)\\s+(?<type_name>)",
-			"beginCaptures": {
+			"match": "\\b(var|const)\\b(<identifier>)",
+			"captures": {
 				"1": {
 					"name": "keyword.other.var.pd"
 				},
 				"2": {
 					"name": "entity.name.variable.pd"
 				}
-			},
-			"end": "(?=;)",
-			"patterns": [
-				{
-					"include": "#generic_argument"
-				}
-			]
+			}
 		},
 		"identifier": {
 			"match": "[_[:alpha:]][_[:alnum:]]*",
-			"name": "variable.other.readwrite.pd"
+			"name": "variable.other.identifier.pd"
 		},
 		"function": {
 			"begin": "\\b(function)\\b\\s+([_~[:alpha:]][_[:alnum:]]*)",
