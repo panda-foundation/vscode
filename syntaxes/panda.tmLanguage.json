@@ -4,7 +4,7 @@
 	"scopeName": "source.panda",
 	"patterns": [
 		{
-			"include": "#comments"
+			"include": "#comment"
 		},
 		{
 			"include": "#metadata"
@@ -19,26 +19,23 @@
 			"include": "#literal"
 		},
 		{
-			"include": "#modifiers"
+			"include": "#modifier"
 		},
 		{
-			"include": "#builtin_functions"
+			"include": "#builtin_function"
 		},
 		{
-			"include": "#functions"
-		},
-		{
-			"include": "#builtin_types"
+			"include": "#function"
 		},
 		{
 			"include": "#enum_class_interface"
 		},
 		{
-			"include": "#keywords"
+			"include": "#keyword"
 		}
 	],
 	"repository": {
-		"keywords": {
+		"keyword": {
 			"patterns": [
 				{
 					"match": "\\b(await|break|case|catch|continue|default|else|for|foreach|if|in|return|select|switch|throw|try)\\b",
@@ -50,15 +47,15 @@
 				}
 			]
 		},
-		"builtin_functions":{
+		"builtin_function":{
 			"match": "\\b(new|print|print_line)\\b(?=\\()",
 			"name": "support.function.builtin.pd"
 		},
-		"modifiers": {
+		"modifier": {
 			"match": "\\b(public|static|weak)\\b",
 			"name": "storage.modifier.pd"
 		},
-		"strings": {
+		"string": {
 			"begin": "\"",
 			"beginCaptures": {
 				"0": {
@@ -73,12 +70,12 @@
 			},
 			"patterns": [
 				{
-					"include": "#string-character-escape"
+					"include": "#string_character_escape"
 				}
 			],
 			"name": "string.quoted.double.pd"
 		},
-		"raw_strings":{
+		"raw_string":{
 			"begin": "`",
 			"beginCaptures": {
 				"0": {
@@ -93,7 +90,7 @@
 			},
 			"name": "string.quoted.other.raw.pd"
 		},
-		"string-character-escape": {
+		"string_character_escape": {
 			"match": "\\\\(['\"\\\\0abfnrtv]|x[0-9a-fA-F]{1,4}|U[0-9a-fA-F]{8}|u[0-9a-fA-F]{4})",
 			"name": "constant.character.escape.pd"
 		},
@@ -116,11 +113,11 @@
 			},
 			"patterns": [
 				{
-					"include": "#char-character-escape"
+					"include": "#char_character_escape"
 				}
 			]
 		},
-		"char-character-escape": {
+		"char_character_escape": {
 			"name": "constant.character.escape.pd",
 			"match": "\\\\(['\"\\\\0abfnrtv]|x[0-9a-fA-F]{1,4}|u[0-9a-fA-F]{4})"
 		},
@@ -152,22 +149,14 @@
 				}
 			]
 		},
-		"constants": {
+		"constant": {
 			"match": "\\b(true|false|null)\\b",
 			"name": "constant.language.pd"
-		},
-		"builtin_types": {
-			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
-			"captures": {
-				"1": {
-					"name": "storage.type.pd"
-				}
-			}
 		},
 		"literal": {
 			"patterns": [
 				{
-					"include": "#constants"
+					"include": "#constant"
 				},
 				{
 					"include": "#numeric"
@@ -176,14 +165,14 @@
 					"include": "#character"
 				},
 				{
-					"include": "#strings"
+					"include": "#string"
 				},
 				{
-					"include": "#raw_strings"
+					"include": "#raw_string"
 				}
 			]
 		},
-		"comments": {
+		"comment": {
 			"patterns": [
 				{
 					"name": "comment.block.pd",
@@ -242,7 +231,29 @@
 				}
 			]
 		},
-		"types": {
+		"builtin_types": {
+			"match": "\\b(bool|char|i8|i16|i32|i64|u8|u16|u32|u64|sbyte|short|int|long|byte|ushort|uint|ulong|f32|f64|float|double|string|void)\\b",
+			"captures": {
+				"1": {
+					"name": "storage.type.pd"
+				}
+			}
+		},
+		"type": {
+			"patterns": [
+				{
+					"include": "#builtin_type"
+				},
+				{
+					"include": "#type_name"
+				},
+				{
+					"include": "#generic_argument"
+				}
+			],
+			"name": "meta.type.pd"
+		},
+		"type_name": {
 			"patterns": [
 				{
 					"match": "([_[:alpha:]][_[:alnum:]]*)(\\.)",
@@ -272,21 +283,39 @@
 				}
 			]
 		},
-		"functions": {
-			"begin": "\\bfunction\\s+([_[:alpha:]][_[:alnum:]]*)",
+		"function": {
+			"begin": "\\b(function)\\b\\s+([_~[:alpha:]][_[:alnum:]]*)",
 			"beginCaptures": {
 				"1": {
-					"name": "support.function.builtin.pd"
+					"name": "keyword.other.function.pd"
+				},
+				"2": {
+					"name": "support.function.pd"
 				}
 			},
 			"end": "(?:\\n|{$)",
 			"patterns": [
 				{
-					"include": "#literal"
-				},
+					"include": "#generic_argument"
+				}
+			]
+		},
+		"generic_argument": {
+			"begin": "<",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.typeparameters.begin.pd"
+				}
+			},
+			"end": ">",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.typeparameters.end.pd"
+				}
+			},
+			"patterns": [
 				{
-					"match": "[_[:alpha:]][_[:alnum:]]*",
-					"name": "entity.name.type.pd"
+					"include": "#type"
 				}
 			]
 		},
