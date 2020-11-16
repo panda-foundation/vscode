@@ -12,13 +12,13 @@
     "contributes": {
         "languages": [{
             "id": "panda",
-            "aliases": ["panda", "panda"],
+            "aliases": ["pd", "panda"],
             "extensions": [".pd"],
             "configuration": "./language-configuration.json"
         }],
         "grammars": [{
             "language": "panda",
-            "scopeName": "source.panda",
+            "scopeName": "source.pd",
             "path": "./syntaxes/panda.tmLanguage.json"
         }]
     }
