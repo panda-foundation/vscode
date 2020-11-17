@@ -19,7 +19,7 @@
 			"include": "#import"
 		},
 		{
-			"include": "#declaration"
+			"include": "#declarations"
 		}
 	],
 	"repository": {
@@ -65,7 +65,7 @@
 					"include": "#string"
 				},
 				{
-					"include": "#string_raw"
+					"include": "#raw_string"
 				},
 				{
 					"begin": "\\(",
@@ -156,6 +156,32 @@
 					]
 				}
 			]
+		},
+		"declarations": {
+			"patterns": [
+				{
+					"include": "#storage_modifier"
+				},
+				{
+					"include": "#property"
+				},
+				{
+					"include": "#method"
+				},
+				{
+					"include": "#class"
+				},
+				{
+					"include": "#enum"
+				},
+				{
+					"include": "#interface"
+				}
+			]
+		},
+		"storage_modifier": {
+			"name": "storage.modifier.pd",
+			"match": "\\b(new|public|static|async)\\b"
 		},
 		"type": {
 			"name": "meta.type.pd",
@@ -249,7 +275,7 @@
 					"include": "#string"
 				},
 				{
-					"include": "#string_raw"
+					"include": "#raw_string"
 				}
 			]
 		},
@@ -339,7 +365,7 @@
 				}
 			]
 		},
-		"string_raw":{
+		"raw_string":{
 			"name": "string.quoted.other.raw.pd",
 			"begin": "`",
 			"beginCaptures": {
