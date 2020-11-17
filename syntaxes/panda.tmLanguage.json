@@ -23,6 +23,46 @@
 		}
 	],
 	"repository": {
+		"preprocessor": {
+			"name": "meta.preprocessor.pd",
+			"begin": "^\\s*(\\#)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.separator.hash.pd"
+				}
+			},
+			"end": "(?<=$)",
+			"patterns": [
+				{
+					"begin": "\\b(?:(if)|(elif))\\b",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.preprocessor.if.pd"
+						},
+						"2": {
+							"name": "keyword.preprocessor.elif.pd"
+						}
+					},
+					"end": "(?=$)",
+					"patterns": [
+						{
+							"include": "#preprocessor_expression"
+						}
+					]
+				},
+				{
+					"match": "\\b(?:(else)|(endif))\\b",
+					"captures": {
+						"1": {
+							"name": "keyword.preprocessor.else.pd"
+						},
+						"2": {
+							"name": "keyword.preprocessor.endif.pd"
+						}
+					}
+				}
+			]
+		},
 		"comment": {
 			"patterns": [
 				{
@@ -163,25 +203,46 @@
 					"include": "#storage_modifier"
 				},
 				{
+					"include": "#enum"
+				},
+				{
 					"include": "#property"
 				},
 				{
 					"include": "#method"
 				},
 				{
-					"include": "#class"
-				},
-				{
-					"include": "#enum"
-				},
-				{
 					"include": "#interface"
+				},
+				{
+					"include": "#class"
 				}
 			]
 		},
 		"storage_modifier": {
 			"name": "storage.modifier.pd",
 			"match": "\\b(new|public|static|async)\\b"
+		},
+		"enum": {
+			"begin": "\\b(enum)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.enum.pd"
+				},
+				"2": {
+					"name": "entity.name.type.enum.pd"
+				}
+			},
+			"end": "\\}",
+			"patterns": [
+				{
+					"match": "[_[:alpha:]][_[:alnum:]]*",
+					"name": "entity.name.type.pd"
+				},
+				{
+					"include": "#literal"
+				}
+			]
 		},
 		"type": {
 			"name": "meta.type.pd",
@@ -194,6 +255,91 @@
 				},
 				{
 					"include": "#type_arguments"
+				}
+			]
+		},
+		"expression": {
+			"patterns": [
+				{
+					"include": "#preprocessor"
+				},
+				{
+					"include": "#checked-unchecked-expression"
+				},
+				{
+					"include": "#typeof-or-default-expression"
+				},
+				{
+					"include": "#nameof-expression"
+				},
+				{
+					"include": "#throw-expression"
+				},
+				{
+					"include": "#interpolated-string"
+				},
+				{
+					"include": "#verbatim-interpolated-string"
+				},
+				{
+					"include": "#this-or-base-expression"
+				},
+				{
+					"include": "#conditional-operator"
+				},
+				{
+					"include": "#expression-operators"
+				},
+				{
+					"include": "#await-expression"
+				},
+				{
+					"include": "#query-expression"
+				},
+				{
+					"include": "#as-expression"
+				},
+				{
+					"include": "#is-expression"
+				},
+				{
+					"include": "#anonymous-method-expression"
+				},
+				{
+					"include": "#object-creation-expression"
+				},
+				{
+					"include": "#array-creation-expression"
+				},
+				{
+					"include": "#anonymous-object-creation-expression"
+				},
+				{
+					"include": "#invocation-expression"
+				},
+				{
+					"include": "#member-access-expression"
+				},
+				{
+					"include": "#element-access-expression"
+				},
+				{
+					"include": "#cast-expression"
+				},
+				{
+					"include": "#literal"
+				},
+				{
+					"include": "#parenthesized-expression"
+				},
+				{
+					"include": "#tuple-deconstruction-assignment"
+				},
+				{
+					"include": "#initializer-expression"
+				},
+				{
+					"include": "#identifier"
 				}
 			]
 		},
@@ -399,6 +545,54 @@
 		"punctuation_accessor": {
 			"name": "punctuation.accessor.pd",
 			"match": "\\."
+		},
+		"preprocessor_expression": {
+			"patterns": [
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.parenthesis.open.pd"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.parenthesis.close.pd"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#preprocessor_expression"
+						}
+					]
+				},
+				{
+					"match": "\\b(?:(true)|(false)|([_[:alpha:]][_[:alnum:]]*))\\b",
+					"captures": {
+						"1": {
+							"name": "constant.language.boolean.true.pd"
+						},
+						"2": {
+							"name": "constant.language.boolean.false.pd"
+						},
+						"3": {
+							"name": "entity.name.variable.preprocessor.symbol.pd"
+						}
+					}
+				},
+				{
+					"match": "(==|!=)|(\\!|&&|\\|\\|)",
+					"captures": {
+						"1": {
+							"name": "keyword.operator.comparison.pd"
+						},
+						"2": {
+							"name": "keyword.operator.logical.pd"
+						}
+					}
+				}
+			]
 		}
 	}
 }
