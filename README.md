@@ -22,6 +22,8 @@ where can emit code (in function)
 
 TO-DO
 
+inline to Modifier {* *}
+
 preprocessor
 
 functions
