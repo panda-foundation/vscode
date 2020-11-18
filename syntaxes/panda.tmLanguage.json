@@ -20,6 +20,9 @@
 		},
 		{
 			"include": "#declarations"
+		},
+		{
+			"include": "#expression"
 		}
 	],
 	"repository": {
@@ -221,26 +224,87 @@
 		},
 		"storage_modifier": {
 			"name": "storage.modifier.pd",
-			"match": "\\b(new|public|static|async)\\b"
+			"match": "\\b(public|static|async)\\b"
 		},
 		"enum": {
-			"begin": "\\b(enum)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
-			"beginCaptures": {
-				"1": {
-					"name": "keyword.other.enum.pd"
-				},
-				"2": {
-					"name": "entity.name.type.enum.pd"
-				}
-			},
-			"end": "\\}",
+			"begin": "(?=\\benum\\b)",
+			"end": "(?<=\\})",
 			"patterns": [
 				{
-					"match": "[_[:alpha:]][_[:alnum:]]*",
-					"name": "entity.name.type.pd"
+					"begin": "(?=enum)",
+					"end": "(?=\\{)",
+					"patterns": [
+						{
+							"match": "(enum)\\s+([_[:alpha:]][_[:alnum:]]*)",
+							"captures": {
+								"1": {
+									"name": "keyword.other.enum.pd"
+								},
+								"2": {
+									"name": "entity.name.type.enum.pd"
+								}
+							}
+						}
+					]
 				},
 				{
-					"include": "#literal"
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.curlybrace.open.pd"
+						}
+					},
+					"end": "\\}",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.curlybrace.close.pd"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#preprocessor"
+						},
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#punctuation_comma"
+						},
+						{
+							"begin": "[_[:alpha:]][_[:alnum:]]*",
+							"beginCaptures": {
+								"0": {
+									"name": "entity.name.variable.enum_member.pd"
+								}
+							},
+							"end": "(?=(,|\\}))",
+							"patterns": [
+								{
+									"include": "#variable_initializer"
+								}
+							]
+						}
+					]
+				},
+				{
+					"include": "#preprocessor"
+				},
+				{
+					"include": "#comment"
+				}
+			]
+		},
+		"variable_initializer": {
+			"begin": "(?<!=|!)(=)(?!=|>)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.operator.assignment.pd"
+				}
+			},
+			"end": "(?=[,\\)\\];}])",
+			"patterns": [
+				{
+					"include": "#expression"
 				}
 			]
 		},
@@ -264,82 +328,233 @@
 					"include": "#preprocessor"
 				},
 				{
-					"include": "#checked-unchecked-expression"
+					"include": "#throw_expression"
 				},
 				{
-					"include": "#typeof-or-default-expression"
+					"include": "#this_or_base_expression"
 				},
 				{
-					"include": "#nameof-expression"
+					"include": "#conditional_operator"
 				},
 				{
-					"include": "#throw-expression"
+					"include": "#expression_operators"
 				},
 				{
-					"include": "#interpolated-string"
+					"include": "#await_expression"
 				},
 				{
-					"include": "#verbatim-interpolated-string"
+					"include": "#object_creation_expression"
 				},
 				{
-					"include": "#this-or-base-expression"
+					"include": "#member_access_expression"
 				},
 				{
-					"include": "#conditional-operator"
-				},
-				{
-					"include": "#expression-operators"
-				},
-				{
-					"include": "#await-expression"
-				},
-				{
-					"include": "#query-expression"
-				},
-				{
-					"include": "#as-expression"
-				},
-				{
-					"include": "#is-expression"
-				},
-				{
-					"include": "#anonymous-method-expression"
-				},
-				{
-					"include": "#object-creation-expression"
-				},
-				{
-					"include": "#array-creation-expression"
-				},
-				{
-					"include": "#anonymous-object-creation-expression"
-				},
-				{
-					"include": "#invocation-expression"
-				},
-				{
-					"include": "#member-access-expression"
-				},
-				{
-					"include": "#element-access-expression"
-				},
-				{
-					"include": "#cast-expression"
+					"include": "#element_access_expression"
 				},
 				{
 					"include": "#literal"
 				},
 				{
-					"include": "#parenthesized-expression"
-				},
-				{
-					"include": "#tuple-deconstruction-assignment"
-				},
-				{
-					"include": "#initializer-expression"
+					"include": "#parenthesized_expression"
 				},
 				{
 					"include": "#identifier"
+				}
+			]
+		},
+		"throw_expression": {
+			"match": "(?<!\\.)\\b(throw)\\b",
+			"captures": {
+				"1": {
+					"name": "keyword.control.flow.throw.pd"
+				}
+			}
+		},
+		"this_or_base_expression": {
+			"match": "\\b(?:(base)|(this))\\b",
+			"captures": {
+				"1": {
+					"name": "keyword.other.base.pd"
+				},
+				"2": {
+					"name": "keyword.other.this.pd"
+				}
+			}
+		},
+		"conditional_operator": {
+			"begin": "(?<!\\?)\\?(?!\\?)",
+			"beginCaptures": {
+				"0": {
+					"name": "keyword.operator.conditional.question-mark.pd"
+				}
+			},
+			"end": ":",
+			"endCaptures": {
+				"0": {
+					"name": "keyword.operator.conditional.colon.pd"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#expression"
+				}
+			]
+		},
+		"expression_operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.assignment.compound.pd",
+					"match": "\\*=|/=|%=|\\+=|-="
+				},
+				{
+					"name": "keyword.operator.assignment.compound.bitwise.pd",
+					"match": "\\&=|\\^=|<<=|>>=|\\|="
+				},
+				{
+					"name": "keyword.operator.bitwise.shift.pd",
+					"match": "<<|>>"
+				},
+				{
+					"name": "keyword.operator.comparison.pd",
+					"match": "==|!="
+				},
+				{
+					"name": "keyword.operator.relational.pd",
+					"match": "<=|>=|<|>"
+				},
+				{
+					"name": "keyword.operator.logical.pd",
+					"match": "\\!|&&|\\|\\|"
+				},
+				{
+					"name": "keyword.operator.bitwise.pd",
+					"match": "\\&|~|\\^|\\|"
+				},
+				{
+					"name": "keyword.operator.assignment.pd",
+					"match": "\\="
+				},
+				{
+					"name": "keyword.operator.decrement.pd",
+					"match": "--"
+				},
+				{
+					"name": "keyword.operator.increment.pd",
+					"match": "\\+\\+"
+				},
+				{
+					"name": "keyword.operator.arithmetic.pd",
+					"match": "%|\\*|/|-|\\+"
+				}
+			]
+		},
+		"await_expression": {
+			"name": "keyword.other.await.pd",
+			"match": "(?!\\.)\\b(await)\\b"
+		},
+		"object_creation_expression": {
+			"begin": "\\b(new)\\b\\s+",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.new.pd"
+				}
+			},
+			"end": "(?=;)",
+			"patterns": [
+				{
+					"include": "#argument_list"
+				},
+				{
+					"include": "#type"
+				},
+				{
+					"include": "#punctuation_accessor"
+				}
+			]
+		},
+		"member_access_expression": {
+			"patterns": [
+				{
+					"match": "([_[:alpha:]][_[:alnum:]]*)(?<type_params>\\s*<([^<>]|\\g<type_params>)+>\\s*)(?=\\.[_[:alpha:]][_[:alnum:]]*)",
+					"captures": {
+						"1": {
+							"name": "variable.other.object.pd"
+						},
+						"2": {
+							"patterns": [
+								{
+									"include": "#type_arguments"
+								}
+							]
+						}
+					}
+				},
+				{
+					"match": "([_[:alpha:]][_[:alnum:]]*)(?=\\.[_[:alpha:]][_[:alnum:]]*)",
+					"captures": {
+						"1": {
+							"name": "variable.other.object.cs"
+						}
+					}
+				}
+			]
+		},
+		"element_access_expression": {
+			"begin": "([_[:alpha:]][_[:alnum:]]*)(?=\\[)",
+			"beginCaptures": {
+				"1": {
+					"name": "variable.other.object.property.pd"
+				}
+			},
+			"end": "(?<=\\])(?!\\s*\\[)",
+			"patterns": [
+				{
+					"include": "#expression"
+				}
+			]
+		},
+		"parenthesized_expression": {
+			"begin": "\\(",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.parenthesis.open.pd"
+				}
+			},
+			"end": "\\)",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.parenthesis.close.pd"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#expression"
+				}
+			]
+		},
+		"identifier": {
+			"name": "variable.other.readwrite.pd",
+			"match": "[_[:alpha:]][_[:alnum:]]*"
+		},
+		"argument_list": {
+			"begin": "\\(",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.parenthesis.open.pd"
+				}
+			},
+			"end": "\\)",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.parenthesis.close.pd"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#expression"
+				},
+				{
+					"include": "#punctuation_comma"
 				}
 			]
 		},
@@ -357,7 +572,7 @@
 					"match": "([_[:alpha:]][_[:alnum:]]*)\\s*(\\.)",
 					"captures": {
 						"1": {
-							"name": "storage.type.pd"
+							"name": "entity.name.type.pd"
 						},
 						"2": {
 							"name": "punctuation.accessor.pd"
@@ -371,12 +586,12 @@
 							"name": "punctuation.accessor.pd"
 						},
 						"2": {
-							"name": "storage.type.pd"
+							"name": "entity.name.type.pd"
 						}
 					}
 				},
 				{
-					"name": "storage.type.pd",
+					"name": "entity.name.type.pd",
 					"match": "[_[:alpha:]][_[:alnum:]]*"
 				}
 			]

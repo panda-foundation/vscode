@@ -20,12 +20,17 @@ add inline {* *}
 add async, await
 add yield
 keyword: async/await/inline/yield
+cast
+
+set get [] or operator overriding
 
 built-in class
 
 method<R, ...>, task<R>, weak<T> , tulpe<...>, any, optional, variant
 
 ?apply
+
+set default if not initialized, also for static value
 -------------------------------------------
 # preprocessor
 

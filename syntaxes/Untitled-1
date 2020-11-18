@@ -1,0 +1,28 @@
+(\\.)?([_[:alpha:]][_[:alnum:]]*)(?<type-params>\\s*<([^<>]|\\g<type-params>)+>\\s*)\n(?=\n  (\\s*\\?)?\n  \\s*\\.\\s*@?[_[:alpha:]][_[:alnum:]]*\n)
+
+
+
+(?<type_params>\\s*<([^<>]|\\g<type_params>)+>\\s*)(?=\\s*\\.[_[:alpha:]][_[:alnum:]]*)
+
+
+
+(\\<  # match the initial opening parenthesis
+
+	# Now make a named group 'balanced' which matches
+	# a balanced substring.
+	(?<balanced>
+
+		# A balanced substring is either something that is not a parenthesis:
+		[^()]
+
+		| # …or a parenthesised string:
+
+		\( # A parenthesised string begins with an opening parenthesis
+			\g<balanced>* # …followed by a sequence of balanced substrings
+		\) # …and ends with a closing parenthesis
+
+	)*  # Look for a sequence of balanced substrings
+
+	\)  # Finally, the outer closing parenthesis
+
+)
