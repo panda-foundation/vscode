@@ -575,6 +575,15 @@
 					"include": "#metadata"
 				},
 				{
+					"include": "#for_statement"
+				},
+
+
+				
+				{
+					"include": "#local_declaration"
+				},
+				{
 					"include": "#punctuation_semicolon"
 				},
 				{
@@ -585,12 +594,6 @@
 				}
 			],
 			"others": [
-				{
-					"include": "#for-statement"
-				},
-				{
-					"include": "#foreach-statement"
-				},
 				{
 					"include": "#if-statement"
 				},
@@ -617,9 +620,68 @@
 				},
 				{
 					"include": "#try-statement"
+				}
+			]
+		},
+		"for_statement": {
+			"begin": "(?<!\\.)\\b(for)\\b\\s*(?=\\()",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.loop.for.pd"
+				}
+			},
+			"end": "(?<=\\})|(?=;)",
+			"patterns": [
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.parenthesis.open.pd"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.parenthesis.close.pd"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#local_declaration"
+						},
+						{
+							"include": "#expression"
+						},
+						{
+							"include": "#punctuation_semicolon"
+						},
+						{
+							"include": "#punctuation_colon"
+						}
+					]
 				},
 				{
-					"include": "#local-declaration"
+					"include": "#statement"
+				}
+			]
+		},
+		"local_declaration": {
+			"begin": "\\b(var|const)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.local.pd"
+				},
+				"2": {
+					"name": "entity.name.variable.local.pd"
+				}
+			},
+			"end": "(?=;|\\)|\\:)",
+			"patterns": [
+				{
+					"include": "#type"
+				},
+				{
+					"include": "#variable_initializer"
 				}
 			]
 		},
@@ -1080,6 +1142,10 @@
 		"punctuation_comma": {
 			"name": "punctuation.separator.comma.pd",
 			"match": ","
+		},
+		"punctuation_colon": {
+			"name": "punctuation.separator.colon.pd",
+			"match": ":"
 		},
 		"punctuation_semicolon": {
 			"name": "punctuation.terminator.statement.pd",
