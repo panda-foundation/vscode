@@ -309,7 +309,7 @@
 					"name": "entity.name.function.pd"
 				}
 			},
-			"end": "(?=\\})|(?=;)",
+			"end": "(?<=\\})|(?=;)",
 			"patterns": [
 				{
 					"include": "#type_parameter_list"
@@ -506,7 +506,7 @@
 					"name": "keyword.operator.assignment.pd"
 				}
 			},
-			"end": "(?=[,\\)\\];}])",
+			"end": "(?=[,\\)\\];])",
 			"patterns": [
 				{
 					"include": "#expression"
@@ -544,6 +544,85 @@
 				}
 			]
 		},
+		"block": {
+			"begin": "\\{",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.curlybrace.open.pd"
+				}
+			},
+			"end": "\\}",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.curlybrace.close.pd"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#statement"
+				}
+			]
+		},
+		"statement": {
+			"patterns": [
+				{
+					"include": "#preprocessor"
+				},
+				{
+					"include": "#comment"
+				},
+				{
+					"include": "#metadata"
+				},
+				{
+					"include": "#punctuation_semicolon"
+				},
+				{
+					"include": "#block"
+				},
+				{
+					"include": "#expression"
+				}
+			],
+			"others": [
+				{
+					"include": "#for-statement"
+				},
+				{
+					"include": "#foreach-statement"
+				},
+				{
+					"include": "#if-statement"
+				},
+				{
+					"include": "#else-part"
+				},
+				{
+					"include": "#switch-statement"
+				},
+				{
+					"include": "#return-statement"
+				},
+				{
+					"include": "#break-or-continue-statement"
+				},
+				{
+					"include": "#throw-statement"
+				},
+				{
+					"include": "#yield-statement"
+				},
+				{
+					"include": "#await-statement"
+				},
+				{
+					"include": "#try-statement"
+				},
+				{
+					"include": "#local-declaration"
+				}
+			]
+		},
 		"expression": {
 			"patterns": [
 				{
@@ -566,6 +645,9 @@
 				},
 				{
 					"include": "#object_creation_expression"
+				},
+				{
+					"include": "#invocation_expression"
 				},
 				{
 					"include": "#member_access_expression"
@@ -691,6 +773,30 @@
 				},
 				{
 					"include": "#punctuation_accessor"
+				}
+			]
+		},
+		"invocation_expression": {
+			"begin": "(?:(\\.)\\s*)?([_[:alpha:]][_[:alnum:]]*)\\s*(?<type-args>\\s*<([^<>]|\\g<type-args>)+>\\s*)?\\s*(?=\\()",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.accessor.pd"
+				},
+				"2": {
+					"name": "entity.name.function.pd"
+				},
+				"3": {
+					"patterns": [
+						{
+							"include": "#type_arguments"
+						}
+					]
+				}
+			},
+			"end": "(?<=\\))",
+			"patterns": [
+				{
+					"include": "#argument_list"
 				}
 			]
 		},
