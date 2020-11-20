@@ -35,4 +35,3 @@ set default if not initialized, also for static value
 # preprocessor
 
 #if #else #elif #endif
-

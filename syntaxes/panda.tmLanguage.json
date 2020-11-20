@@ -227,26 +227,17 @@
 			"match": "\\b(public|static|async)\\b"
 		},
 		"enum": {
-			"begin": "(?=\\benum\\b)",
+			"begin": "\\b(enum)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.enum.pd"
+				},
+				"2": {
+					"name": "entity.name.type.enum.pd"
+				}
+			},
 			"end": "(?<=\\})",
 			"patterns": [
-				{
-					"begin": "(?=enum)",
-					"end": "(?=\\{)",
-					"patterns": [
-						{
-							"match": "(enum)\\s+([_[:alpha:]][_[:alnum:]]*)",
-							"captures": {
-								"1": {
-									"name": "keyword.other.enum.pd"
-								},
-								"2": {
-									"name": "entity.name.type.enum.pd"
-								}
-							}
-						}
-					]
-				},
 				{
 					"begin": "\\{",
 					"beginCaptures": {
@@ -285,12 +276,226 @@
 							]
 						}
 					]
+				}
+			]
+		},
+		"property": {
+			"begin": "\\b(const|var)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.property.pd"
+				},
+				"2": {
+					"name": "entity.name.variable.pd"
+				}
+			},
+			"end": "(?=;)",
+			"patterns": [
+				{
+					"include": "#type"
+				},
+				{
+					"include": "#variable_initializer"
+				}
+			]
+		},
+		"method": {
+			"begin": "(\\bfunction\\b)\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.other.function.pd"
+				},
+				"2": {
+					"name": "entity.name.function.pd"
+				}
+			},
+			"end": "(?=\\})|(?=;)",
+			"patterns": [
+				{
+					"include": "#type_parameter_list"
+				},
+				{
+					"include": "#parenthesized_parameter_list"
+				},
+				{
+					"include": "#type"
+				},
+				{
+					"include": "#block"
+				}
+			]
+		},
+		"interface-declaration": {
+			"begin": "(?=\\binterface\\b)",
+			"end": "(?<=\\})",
+			"patterns": [
+				{
+					"begin": "(?x)\n(interface)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.other.interface.cs"
+						},
+						"2": {
+							"name": "entity.name.type.interface.cs"
+						}
+					},
+					"end": "(?=\\{)",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#type-parameter-list"
+						},
+						{
+							"include": "#base-types"
+						},
+						{
+							"include": "#generic-constraints"
+						}
+					]
+				},
+				{
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.curlybrace.open.cs"
+						}
+					},
+					"end": "\\}",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.curlybrace.close.cs"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#interface-members"
+						}
+					]
 				},
 				{
 					"include": "#preprocessor"
 				},
 				{
 					"include": "#comment"
+				}
+			]
+		},
+		"class-declaration": {
+			"begin": "(?=\\bclass\\b)",
+			"end": "(?<=\\})",
+			"patterns": [
+				{
+					"begin": "(?x)\n\\b(class)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.other.class.cs"
+						},
+						"2": {
+							"name": "entity.name.type.class.cs"
+						}
+					},
+					"end": "(?=\\{)",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#type_parameter_list"
+						},
+						{
+							"include": "#base-types"
+						},
+						{
+							"include": "#generic-constraints"
+						}
+					]
+				},
+				{
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.curlybrace.open.cs"
+						}
+					},
+					"end": "\\}",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.curlybrace.close.cs"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#class-or-struct-members"
+						}
+					]
+				},
+				{
+					"include": "#preprocessor"
+				},
+				{
+					"include": "#comment"
+				}
+			]
+		},
+		"parenthesized_parameter_list": {
+			"begin": "(\\()",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.parenthesis.open.pd"
+				}
+			},
+			"end": "(\\))",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.parenthesis.close.pd"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#parameter"
+				},
+				{
+					"include": "#punctuation_comma"
+				},
+				{
+					"include": "#variable_initializer"
+				}
+			]
+		},
+		"type_parameter_list": {
+			"begin": "\\<",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.typeparameters.begin.pd"
+				}
+			},
+			"end": "\\>",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.typeparameters.end.pd"
+				}
+			},
+			"patterns": [
+				{
+					"match": "([_[:alpha:]][_[:alnum:]]*)\\b",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.type-parameter.pd"
+						}
+					}
+				},
+				{
+					"begin": "\\:\\s*",
+					"patterns": [
+						{
+							"include": "#type"
+						}
+					]
+				},
+				{
+					"include": "#punctuation_comma"
 				}
 			]
 		},
@@ -319,6 +524,23 @@
 				},
 				{
 					"include": "#type_arguments"
+				}
+			]
+		},
+		"parameter": {
+			"begin": "([_[:alpha:]][_[:alnum:]]*)",
+			"beginCaptures": {
+				"1": {
+					"name": "entity.name.variable.parameter.pd"
+				}
+			},
+			"end": "(?=,)|(?=\\))",
+			"patterns": [
+				{
+					"include": "#type"
+				},
+				{
+					"include": "#variable_initializer"
 				}
 			]
 		},
@@ -388,7 +610,7 @@
 					"name": "keyword.operator.conditional.question-mark.pd"
 				}
 			},
-			"end": ":",
+			"end": "\\:",
 			"endCaptures": {
 				"0": {
 					"name": "keyword.operator.conditional.colon.pd"
@@ -597,13 +819,13 @@
 			]
 		},
 		"type_arguments": {
-			"begin": "<",
+			"begin": "\\<",
 			"beginCaptures": {
 				"0": {
 					"name": "punctuation.definition.typeparameters.begin.pd"
 				}
 			},
-			"end": ">",
+			"end": "\\>",
 			"endCaptures": {
 				"0": {
 					"name": "punctuation.definition.typeparameters.end.pd"
