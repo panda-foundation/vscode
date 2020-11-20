@@ -11,27 +11,30 @@ where has @doc?
 enum interface class
 package and member const var function
 
-where can emit code (in function)
+where can emit code (inside function)
 {*std::cout << t << std::endl;*}
+
 -------------------------------------------
 TO-DO
 
-add inline {* *}
+add inline
 add async, await
 add yield
 keyword: async/await/inline/yield
 cast
 
-set get [] or operator overriding
+set get [] or operator overriding ???
 
 built-in class
 
-method<R, ...>, task<R>, weak<T> , tulpe<...>, any, optional, variant
+method<R, ...>?apply, task<R>, weak<T> , tulpe<...>, any, optional, variant
 
-?apply
+set default if not initialized, also for static value (code generation)
 
-set default if not initialized, also for static value
 -------------------------------------------
 # preprocessor
 
 #if #else #elif #endif
+
+---------------------------
+not finished: interface, class 

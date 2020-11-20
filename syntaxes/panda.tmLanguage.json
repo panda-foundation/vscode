@@ -300,12 +300,15 @@
 			]
 		},
 		"method": {
-			"begin": "(\\bfunction\\b)\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"begin": "(\\binline\\b\\s+)?(\\bfunction\\b)\\s+([_[:alpha:]][_[:alnum:]]*)",
 			"beginCaptures": {
 				"1": {
-					"name": "keyword.other.function.pd"
+					"name": "keyword.other.inline.pd"
 				},
 				"2": {
+					"name": "keyword.other.function.pd"
+				},
+				"3": {
 					"name": "entity.name.function.pd"
 				}
 			},
