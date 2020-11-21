@@ -105,12 +105,6 @@
 			"end": "(?:\\n|$)",
 			"patterns": [
 				{
-					"include": "#string"
-				},
-				{
-					"include": "#raw_string"
-				},
-				{
 					"begin": "\\(",
 					"beginCaptures": {
 						"0": {
