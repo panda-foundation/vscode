@@ -2,7 +2,8 @@
     "name": "panda",
     "displayName": "panda",
     "description": "panda program language",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "publisher": "sanghuacai",
     "engines": {
         "vscode": "^1.46.0"
     },
