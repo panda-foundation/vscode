@@ -23,7 +23,7 @@ add yield
 keyword: async/await/inline/yield
 cast
 
-set get [] or operator overriding ???
+operator overriding use metadata
 
 built-in class
 

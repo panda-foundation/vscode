@@ -300,7 +300,7 @@
 			]
 		},
 		"method": {
-			"begin": "(\\binline\\b\\s+)?(\\bfunction\\b)\\s+([_[:alpha:]][_[:alnum:]]*)",
+			"begin": "(\\binline\\b\\s+)?(\\bfunction\\b)\\s+([_~[:alpha:]][_[:alnum:]]*)",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.other.inline.pd"
@@ -328,33 +328,27 @@
 				}
 			]
 		},
-		"interface-declaration": {
+		"interface": {
 			"begin": "(?=\\binterface\\b)",
 			"end": "(?<=\\})",
 			"patterns": [
 				{
-					"begin": "(?x)\n(interface)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)",
+					"begin": "\\b(interface)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.other.interface.cs"
+							"name": "keyword.other.interface.pd"
 						},
 						"2": {
-							"name": "entity.name.type.interface.cs"
+							"name": "entity.name.type.interface.pd"
 						}
 					},
 					"end": "(?=\\{)",
 					"patterns": [
 						{
-							"include": "#comment"
+							"include": "#type_parameter_list"
 						},
 						{
-							"include": "#type-parameter-list"
-						},
-						{
-							"include": "#base-types"
-						},
-						{
-							"include": "#generic-constraints"
+							"include": "#base_types"
 						}
 					]
 				},
@@ -362,41 +356,50 @@
 					"begin": "\\{",
 					"beginCaptures": {
 						"0": {
-							"name": "punctuation.curlybrace.open.cs"
+							"name": "punctuation.curlybrace.open.pd"
 						}
 					},
 					"end": "\\}",
 					"endCaptures": {
 						"0": {
-							"name": "punctuation.curlybrace.close.cs"
+							"name": "punctuation.curlybrace.close.pd"
 						}
 					},
 					"patterns": [
 						{
-							"include": "#interface-members"
+							"include": "#preprocessor"
+						},
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#metadata"
+						},
+						{
+							"include": "#property"
+						},
+						{
+							"include": "#method"
+						},
+						{
+							"include": "#punctuation_semicolon"
 						}
 					]
-				},
-				{
-					"include": "#preprocessor"
-				},
-				{
-					"include": "#comment"
 				}
 			]
 		},
-		"class-declaration": {
+		"class": {
 			"begin": "(?=\\bclass\\b)",
 			"end": "(?<=\\})",
 			"patterns": [
 				{
-					"begin": "(?x)\n\\b(class)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*",
+					"begin": "\\b(class)\\b\\s+([_[:alpha:]][_[:alnum:]]*)\\s*",
 					"beginCaptures": {
 						"1": {
-							"name": "keyword.other.class.cs"
+							"name": "keyword.other.class.pd"
 						},
 						"2": {
-							"name": "entity.name.type.class.cs"
+							"name": "entity.name.type.class.pd"
 						}
 					},
 					"end": "(?=\\{)",
@@ -408,10 +411,7 @@
 							"include": "#type_parameter_list"
 						},
 						{
-							"include": "#base-types"
-						},
-						{
-							"include": "#generic-constraints"
+							"include": "#base_types"
 						}
 					]
 				},
@@ -419,18 +419,36 @@
 					"begin": "\\{",
 					"beginCaptures": {
 						"0": {
-							"name": "punctuation.curlybrace.open.cs"
+							"name": "punctuation.curlybrace.open.pd"
 						}
 					},
 					"end": "\\}",
 					"endCaptures": {
 						"0": {
-							"name": "punctuation.curlybrace.close.cs"
+							"name": "punctuation.curlybrace.close.pd"
 						}
 					},
 					"patterns": [
 						{
-							"include": "#class-or-struct-members"
+							"include": "#preprocessor"
+						},
+						{
+							"include": "#comment"
+						},
+						{
+							"include": "#metadata"
+						},
+						{
+							"include": "#storage_modifier"
+						},
+						{
+							"include": "#property"
+						},
+						{
+							"include": "#method"
+						},
+						{
+							"include": "#punctuation_semicolon"
 						}
 					]
 				},
@@ -439,6 +457,23 @@
 				},
 				{
 					"include": "#comment"
+				}
+			]
+		},
+		"base_types": {
+			"begin": ":",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.separator.colon.pd"
+				}
+			},
+			"end": "(?=\\{)",
+			"patterns": [
+				{
+					"include": "#type"
+				},
+				{
+					"include": "#punctuation_comma"
 				}
 			]
 		},
@@ -1161,7 +1196,7 @@
 					"match": "([_[:alpha:]][_[:alnum:]]*)(?=\\.[_[:alpha:]][_[:alnum:]]*)",
 					"captures": {
 						"1": {
-							"name": "variable.other.object.cs"
+							"name": "variable.other.object.pd"
 						}
 					}
 				}
