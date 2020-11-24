@@ -54,13 +54,13 @@
 					]
 				},
 				{
-					"match": "\\b(?:(else)|(endif))\\b",
+					"match": "\\b(?:(else)|(end))\\b",
 					"captures": {
 						"1": {
 							"name": "keyword.preprocessor.else.pd"
 						},
 						"2": {
-							"name": "keyword.preprocessor.endif.pd"
+							"name": "keyword.preprocessor.end.pd"
 						}
 					}
 				}

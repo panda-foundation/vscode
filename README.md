@@ -35,6 +35,3 @@ set default if not initialized, also for static value (code generation)
 # preprocessor
 
 #if #else #elif #endif
-
----------------------------
-not finished: interface, class 
