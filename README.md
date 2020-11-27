@@ -1,17 +1,17 @@
 # vscode
 
 -------------------------------------------
-where has metadata (stored in class define)
+where has custom (unhandled) metadata (stored in class define)
 class
 member const
 member var
 member function
 
-where has @doc?
+where has @doc? only public declaration
 enum interface class
 package and member const var function
 
-where can emit code (inside function)
+where can emit code (inside function) // use plugin
 {*std::cout << t << std::endl;*}
 
 -------------------------------------------
