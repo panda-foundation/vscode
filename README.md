@@ -20,7 +20,7 @@ TO-DO
 add inline
 add async, await
 add yield
-keyword: async/await/inline/yield
+keyword: await/inline/yield
 cast
 
 operator overriding use metadata

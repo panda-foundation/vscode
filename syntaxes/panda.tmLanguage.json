@@ -16,7 +16,7 @@
 			"include": "#namespace"
 		},
 		{
-			"include": "#import"
+			"include": "#using"
 		},
 		{
 			"include": "#declarations"
@@ -140,7 +140,7 @@
 			]
 		},
 		"namespace": {
-			"begin": "\\b(namespace)\\b\\s+",
+			"begin": "\\b(namespace)\\b\\s*",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.other.namespace.pd"
@@ -157,10 +157,10 @@
 				}
 			]
 		},
-		"import": {
+		"using": {
 			"patterns": [
 				{
-					"begin": "\\b(import)\\b\\s+([_[:alpha:]][_[:alnum:]]*)\\s*=",
+					"begin": "\\b(using)\\b\\s+([_[:alpha:]][_[:alnum:]]*)\\s*=",
 					"beginCaptures": {
 						"1": {
 							"name": "keyword.other.using.pd"
@@ -178,7 +178,7 @@
 					]
 				},
 				{
-					"begin": "\\b(import)\\b\\s*",
+					"begin": "\\b(using)\\b\\s*",
 					"beginCaptures": {
 						"1": {
 							"name": "keyword.other.using.pd"
@@ -218,7 +218,7 @@
 		},
 		"storage_modifier": {
 			"name": "storage.modifier.pd",
-			"match": "\\b(public|static|async)\\b"
+			"match": "\\b(public|static)\\b"
 		},
 		"enum": {
 			"begin": "\\b(enum)\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
@@ -539,15 +539,13 @@
 					}
 				},
 				{
-					"begin": "\\:\\s*",
-					"patterns": [
-						{
-							"include": "#type"
-						}
-					]
+					"include": "#punctuation_comma"
 				},
 				{
-					"include": "#punctuation_comma"
+					"include": "#punctuation_colon"
+				},
+				{
+					"include": "#punctuation_ellipsis"
 				}
 			]
 		},
@@ -1340,6 +1338,9 @@
 				},
 				{
 					"include": "#punctuation_comma"
+				},
+				{
+					"include": "#punctuation_ellipsis"
 				}
 			]
 		},
@@ -1489,6 +1490,10 @@
 		"punctuation_accessor": {
 			"name": "punctuation.accessor.pd",
 			"match": "\\."
+		},
+		"punctuation_ellipsis": {
+			"name": "punctuation.accessor.pd",
+			"match": "\\.\\.\\."
 		},
 		"preprocessor_expression": {
 			"patterns": [
